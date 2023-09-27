@@ -84,13 +84,15 @@
   <script>
     
     Validator({
-      form: 'form-1',
+      form: '#form-1',
       errorSelector: '.form-message',
       rules: [
         Validator.isRequired('#fullname'),
+        Validator.isRequired('#email'),
         Validator.isEmail('#email'),
         Validator.isRequired('#password'),
         Validator.isValidPassword('#password', 8),
+        Validator.isRequired('#password_confirmation'),
         Validator.isConfirmed('#password_confirmation', function() {
           return document.querySelector('#form-1 #password').value;
         }, "Your password confirm is wrong"),
