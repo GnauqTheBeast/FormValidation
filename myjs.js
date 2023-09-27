@@ -47,11 +47,24 @@ const Validator = function(options) {
           isFormValid = false;
         }
       });
+
+     
+      
       if(isFormValid) {
-        options.onSubmit({
-          name: 'Quangdz',
-          job: 'Coder'
-        })
+        if(typeof options.onSubmit === 'function') {
+          var enableInputs = formElement.querySelectorAll('[name]');
+
+          var formValues = Array.from(enableInputs).reduce(function(values, input) {
+            values[input.name] = input.value;
+            return values;
+          }, {});
+
+          options.onSubmit(formValues);
+        }
+        else {
+          //Default submit 
+          formElement.submit();
+        }
       }
     }
 
