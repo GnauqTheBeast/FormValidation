@@ -96,7 +96,10 @@
         Validator.isConfirmed('#password_confirmation', function() {
           return document.querySelector('#form-1 #password').value;
         }, "Your password confirm is wrong"),
-      ] 
+      ],
+      onSubmit : function(x) {
+        console.log(x);
+      },
     })
   </script>
 </html>

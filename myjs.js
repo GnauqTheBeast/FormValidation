@@ -15,7 +15,7 @@ const Validator = function(options) {
     //Loop through every rule, if has mistake, break out loop
     for(var i = 0; i < rules.length; i++) {
       errorMessage = rules[i](inputElement.value);
-      if(errorMessage)
+      if(errorMessage)  
         break;
     }
 
@@ -27,6 +27,7 @@ const Validator = function(options) {
       errorElement.innerHTML = "";
       inputElement.parentElement.classList.remove('invalid');
     }
+    return !errorMessage;
   }
   
   var formElement = $(`${options.form}`);
@@ -36,12 +37,22 @@ const Validator = function(options) {
       //prevent Submit 
       e.preventDefault();
 
+      var isFormValid = true;
+
       //When submit, loop every rule to check form submit
       options.rules.forEach(function(rule) {
         var inputElement = formElement.querySelector(rule.selector);
-        validate(inputElement, rule);
+        var isValid = validate(inputElement, rule);
+        if(!isValid) {
+          isFormValid = false;
+        }
       });
-
+      if(isFormValid) {
+        options.onSubmit({
+          name: 'Quangdz',
+          job: 'Coder'
+        })
+      }
     }
 
     //Loop through every rule
