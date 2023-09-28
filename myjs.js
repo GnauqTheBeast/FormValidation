@@ -5,8 +5,17 @@ const Validator = function(options) {
 
   var selectorRules = {};
 
+  function getGroupElement(element, selector) {
+    while(element.parentElement) {
+      if(element.parentElement.matches(selector)) {
+        return element.parentElement;
+      }
+      element = element.parentElement;
+    }
+  }
+
   var validate = function(inputElement, rule) {
-    var errorElement = inputElement.parentElement.querySelector(options.errorSelector);
+    var errorElement = getGroupElement(inputElement, options.formGroupSelector).querySelector(options.errorSelector);
     var errorMessage;
 
     //Get every rule of selector
@@ -21,11 +30,11 @@ const Validator = function(options) {
 
     if(errorMessage) {
       errorElement.innerHTML = errorMessage; 
-      inputElement.parentElement.classList.add('invalid');
+      getGroupElement(inputElement, options.formGroupSelector).classList.add('invalid');
     }
     else {
       errorElement.innerHTML = "";
-      inputElement.parentElement.classList.remove('invalid');
+      getGroupElement(inputElement, options.formGroupSelector).classList.remove('invalid');
     }
     return !errorMessage;
   }
@@ -48,8 +57,6 @@ const Validator = function(options) {
         }
       });
 
-     
-      
       if(isFormValid) {
         if(typeof options.onSubmit === 'function') {
           var enableInputs = formElement.querySelectorAll('[name]');
@@ -86,9 +93,9 @@ const Validator = function(options) {
           validate(inputElement, rule);
         }
         inputElement.oninput = function() {
-          var errorElement = inputElement.parentElement.querySelector(options.errorSelector);
+          var errorElement = getGroupElement(inputElement, options.formGroupSelector).querySelector(options.errorSelector);
           errorElement.innerHTML = '';
-          inputElement.parentElement.classList.remove('invalid');
+          getGroupElement(inputElement, options.formGroupSelector).classList.remove('invalid');
         }
       }
     });
