@@ -15,7 +15,7 @@
 .form {
   padding: 36px 20px;
   width: 450px;
-  min-height: 70vh;
+  min-height: 100vh;
   background-color: #fff;
   text-align: center;
   border-radius: 5px;
@@ -93,3 +93,17 @@ header h1 {
 .btn-submit:hover {
   opacity: 0.8;
 }
+
+.gender-radio {
+  display: flex;
+  justify-content: space-evenly;
+}
+/* 
+.gender-radio input:checked ~.checkmark{
+  background-color: #12b886;
+} */
+
+.radio {
+  cursor: pointer;
+}
+
