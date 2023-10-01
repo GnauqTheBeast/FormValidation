@@ -17,17 +17,21 @@ const Validator = function(options) {
   var validate = function(inputElement, rule) {
     var errorElement = getGroupElement(inputElement, options.formGroupSelector).querySelector(options.errorSelector);
     var errorMessage;
-
     //Get every rule of selector
     var rules = selectorRules[rule.selector];
-
     //Loop through every rule, if has mistake, break out loop
     for(var i = 0; i < rules.length; i++) {
-      errorMessage = rules[i](inputElement.value);
+      switch(inputElement.type) {
+        case 'radio':
+        case 'checkbox':
+          errorMessage = rules[i](formElement.querySelector(rule.selector + ":checked"));
+          break;
+        default:
+          errorMessage = rules[i](inputElement.value);
+      }
       if(errorMessage)  
         break;
     }
-
     if(errorMessage) {
       errorElement.innerHTML = errorMessage; 
       getGroupElement(inputElement, options.formGroupSelector).classList.add('invalid');
@@ -42,12 +46,11 @@ const Validator = function(options) {
   var formElement = $(`${options.form}`);
 
   if(formElement) {
+    // FORM SUBMIT
     formElement.onsubmit = function(e) {
       //prevent Submit 
       e.preventDefault();
-
       var isFormValid = true;
-
       //When submit, loop every rule to check form submit
       options.rules.forEach(function(rule) {
         var inputElement = formElement.querySelector(rule.selector);
@@ -56,16 +59,20 @@ const Validator = function(options) {
           isFormValid = false;
         }
       });
-
       if(isFormValid) {
         if(typeof options.onSubmit === 'function') {
           var enableInputs = formElement.querySelectorAll('[name]');
-
           var formValues = Array.from(enableInputs).reduce(function(values, input) {
-            values[input.name] = input.value;
+            switch(input.type) {
+              case 'checkbox':
+              case 'radio':
+                values[input.name] = formElement.querySelector('input[name="' + input.name + '"]:checked').value;
+                break;
+              default:
+                values[input.name] = input.value;
+            }
             return values;
           }, {});
-
           options.onSubmit(formValues);
         }
         else {
@@ -74,8 +81,7 @@ const Validator = function(options) {
         }
       }
     }
-
-    //Loop through every rule
+    //Loop through every rule to get validator
     options.rules.forEach(function(rule) {
       //Save every rule for a single input
       if(Array.isArray(selectorRules[rule.selector])) {
@@ -84,11 +90,8 @@ const Validator = function(options) {
       else {
         selectorRules[rule.selector] = [rule.test];
       }
-
-      var inputElement = formElement.querySelector(rule.selector);
-
-      //HTML DOM EVENT
-      if(inputElement) {
+      var inputElements = formElement.querySelectorAll(rule.selector);
+      Array.from(inputElements).forEach(function(inputElement) {
         inputElement.onblur = function() {
           validate(inputElement, rule);
         }
@@ -97,17 +100,16 @@ const Validator = function(options) {
           errorElement.innerHTML = '';
           getGroupElement(inputElement, options.formGroupSelector).classList.remove('invalid');
         }
-      }
+      });
     });
   }
-
 }
 
 Validator.isRequired = function(selector) {
   return {
     selector: selector,
     test: function(value) {
-      return value.trim() ? undefined : "Please fill out this field";
+      return value ? undefined : "Please fill out this field";
     }
   }
 }

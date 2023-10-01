@@ -16,7 +16,7 @@
       crossorigin="anonymous"
     /> -->
     <link rel="stylesheet" href="style.css" />
-    <title>Form Validation</title>
+    <title>Form Validation</title>  
   </head>
   <body>
     <div class="container">
@@ -42,27 +42,24 @@
           <label for="gender" class="form-label">Gender</label>
           <div class="gender-radio">
             <div>
-              <label for="gender" class="form-label">Male
-                <input
-                name="gender"
-                type="radio"
-                value="male"
-                class="radio"
-                checked 
-                />
-              </label>
+              Male
+              <input
+              name="gender"
+              type="radio"
+              value="male"
+              class="form-control"
+              />
             </div>
             <div>
-              <label for="gender" class="form-label">Female
-                <input
-                name="gender"
-                type="radio"
-                value="female"
-                class="radio"
-                />
-              </label>
+              Female
+              <input
+              name="gender"
+              type="radio"
+              value="female"
+              class="form-control"
+              />
             </div>
-            </div>
+          </div>
           <span class="form-message"></span>
         </div>
 
@@ -119,6 +116,7 @@
         Validator.isRequired('#fullname'),
         Validator.isRequired('#email'),
         Validator.isEmail('#email'),
+        Validator.isRequired('input[name="gender"]'),
         Validator.isRequired('#password'),
         Validator.isValidPassword('#password', 8),
         Validator.isRequired('#password_confirmation'),

@@ -98,10 +98,6 @@ header h1 {
   display: flex;
   justify-content: space-evenly;
 }
-/* 
-.gender-radio input:checked ~.checkmark{
-  background-color: #12b886;
-} */
 
 .radio {
   cursor: pointer;
